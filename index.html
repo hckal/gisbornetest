@@ -471,7 +471,7 @@
             
             const url = `${API_CONFIG.PROXY_URL}?type=directions&lng1=${lng1}&lat1=${lat1}&lng2=${lng2}&lat2=${lat2}`;
             
-            console.log([${i + 1}/${locs.length - 1}] Fetching: ${from.name} → ${to.name});
+            console.log(`[${i + 1}/${locs.length - 1}] Fetching: ${from.name} → ${to.name}`);
             console.log('URL:', url);
             
             try {
@@ -701,7 +701,7 @@
         
         try {
           const response = await fetch(
-            ``${API_CONFIG.PROXY_URL}?type=weather&lat=${lat}&lon=${lng}``
+            `${API_CONFIG.PROXY_URL}?type=weather&lat=${lat}&lon=${lng}`
           );
           const data = await response.json();
           setWeather({
