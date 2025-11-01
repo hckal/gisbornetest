@@ -366,6 +366,7 @@
       const [locations, setLocations] = useState([]);
       const [isOnline, setIsOnline] = useState(navigator.onLine);
       const [weather, setWeather] = useState(null);
+      const [token, setToken] = useState(null);//add token state
       const [isLoading, setIsLoading] = useState(true);
       const [loadingWeather, setLoadingWeather] = useState(false);
       const [mapContextLost, setMapContextLost] = useState(false);
@@ -417,6 +418,17 @@
         };
       }, []);
 
+    // added for Fetch Mapbox token from proxy
+    useEffect(() => {
+      fetch(API_CONFIG.PROXY_URL + '?type=mapbox_token')
+        .then(r => r.json())
+        .then(data => {
+          console.log('Token received:', !!data.token);
+          setToken(data.token);
+        })
+        .catch(e => console.error('Token error:', e));
+    }, []);
+
       // Save locations to localStorage
       useEffect(() => {
         if (locations.length > 0) {
@@ -458,8 +470,8 @@
         let failCount = 0;
 
         try {
-          console.log('Token available:', !!API_CONFIG.MAPBOX_TOKEN);
-          console.log('Token starts with:', API_CONFIG.MAPBOX_TOKEN?.substring(0, 20) + '...');
+          console.log('Token available:', !!token);
+          console.log('Token starts with:', token?.substring(0, 20) + '...');
           
           for (let i = 0; i < locs.length - 1; i++) {
             const from = locs[i];
@@ -579,9 +591,9 @@
 
       // Initialize Mapbox map
       useEffect(() => {
-        if (activeTab === 'map' && mapContainer.current && !map.current && API_CONFIG.MAPBOX_TOKEN !== 'YOUR_MAPBOX_ACCESS_TOKEN_HERE') {
+        if (activeTab === 'map' && mapContainer.current && !map.current && token !== 'token') {
           console.log('🗺️ Initializing Mapbox map');
-          mapboxgl.accessToken = API_CONFIG.MAPBOX_TOKEN;
+          mapboxgl.accessToken = token;
           
           map.current = new mapboxgl.Map({
             container: mapContainer.current,
@@ -1008,7 +1020,7 @@
 
             {activeTab === 'map' && (
               <div className="h-full min-h-screen">
-                {API_CONFIG.MAPBOX_TOKEN === 'YOUR_MAPBOX_ACCESS_TOKEN_HERE' && (
+                {token === 'token' && (
                   <div className="flex items-center justify-center h-full bg-gradient-to-br from-blue-50 to-blue-100 p-8">
                     <div className="text-center max-w-md">
                       <div className="w-24 h-24 bg-blue-200 rounded-full flex items-center justify-center mx-auto mb-6">
