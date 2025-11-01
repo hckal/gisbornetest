@@ -469,9 +469,9 @@
             const [lng1, lat1] = from.coordinates;
             const [lng2, lat2] = to.coordinates;
             
-            const url = ``${API_CONFIG.PROXY_URL}?type=directions&lng1=${lng1}&lat1=${lat1}&lng2=${lng2}&lat2=${lat2}`;
+            const url = `${API_CONFIG.PROXY_URL}?type=directions&lng1=${lng1}&lat1=${lat1}&lng2=${lng2}&lat2=${lat2}`;
             
-            console.log(`[${i + 1}/${locs.length - 1}] Fetching: ${from.name} → ${to.name}`);
+            console.log([${i + 1}/${locs.length - 1}] Fetching: ${from.name} → ${to.name});
             console.log('URL:', url);
             
             try {
