@@ -635,6 +635,7 @@
               el.style.fontSize = '14px';
               el.style.border = '2px solid white';
               el.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
+              const sequenceNumber = locations.indexOf(location) + 1;
               el.textContent = sequenceNumber; // Add sequence number inside marker 1, 2, 3, etc.;
 
               new mapboxgl.Marker(el)
