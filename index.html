@@ -41,6 +41,26 @@
       height: 100%;
       min-height: calc(100vh - 180px);
     }
+
+    .marker {
+      background-color: #3B82F6;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      border: 3px solid white;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      cursor: pointer;
+    }
+
+    .marker.visited {
+      background-color: #9CA3AF;
+    }
   </style>
 </head>
 <body>
@@ -64,21 +84,8 @@
     };
     // ============================================
 
-    // Simple icon components using SVG
-    // const WifiIcon = () => (
-    //   <svg className="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    //     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0" />
-    //   </svg>
-    // );
-
-    // const WifiOffIcon = () => (
-    //   <svg className="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    //     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3m8.293 8.293l1.414 1.414" />
-    //   </svg>
-    // );
-
-    const WifiIcon = () => null; //keep the components but make them render nothing
-    const WifiOffIcon = () => null; //keep the components but make them render nothing
+    const WifiIcon = () => null;
+    const WifiOffIcon = () => null;
 
     const NavigationIcon = () => (
       <svg className="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -166,9 +173,8 @@
         booking: { hasBooking: false, time: null, date: null },
         notes: "Bike hire and cycle tours"
       },
-
-  {
-    id: "location_003",
+      {
+        id: "location_003",
         name: "3 Little Words",
         address: "107 Dry River Road, Martinborough",
         googleMapsQuery: "3 Little Words, 107 Dry River Road, Martinborough",
@@ -181,10 +187,7 @@
           time: "2:30 PM", 
           date: "November 2, 2025" 
         },
-        //notes: "⚠️ BOOKING CONFIRMED - 2:30 PM"
       },
-      //renumber the rest of the locations accordingly
-     
       {
         id: "location_004",
         name: "Top 10 Holiday Park",
@@ -221,8 +224,6 @@
         booking: { hasBooking: false, time: null, date: null },
         notes: "Lighthouse & beach"
       },
-
-
       {
         id: "location_007",
         name: "Amble Inn Motel",
@@ -235,8 +236,6 @@
         booking: { hasBooking: false, time: null, date: null },
         notes: "Accommodation"
       },
-
-
       {
         id: "location_008",
         name: "Harbour View Motel on Ahuriri Napier Beach (with sea view suites)",
@@ -277,9 +276,6 @@
         booking: { hasBooking: false, time: null, date: null },
         notes: "Hiking track"
       },
-
-
-
       {
         id: "location_011",
         name: "Captain Cook Motor Lodge",
@@ -292,13 +288,6 @@
         booking: { hasBooking: false, time: null, date: null },
         notes: "Accommodation"
       },
-
-
-
-
-
-
-     
       {
         id: "location_012",
         name: "Cook's Cove Walkway",
@@ -327,8 +316,6 @@
         },
         notes: "⚠️ BOOKING CONFIRMED - 1:00 PM"
       },
-
-
       {
         id: "location_014",
         name: "The Mayfair Motel | Hastings",
@@ -341,7 +328,6 @@
         booking: { hasBooking: false, time: null, date: null},
         notes: "Accommodation"
       },
-
       {
         id: "location_015",
         name: "Te Mata Peak",
@@ -354,9 +340,6 @@
         booking: { hasBooking: false, time: null, date: null },
         notes: "Scenic views"
       },
-
-
-
       {
         id: "location_016",
         name: "Cape Kidnappers",
@@ -369,7 +352,6 @@
         booking: { hasBooking: false, time: null, date: null },
         notes: "Gannet colony"
       },
-      
     ];
 
     const RoadTripPlanner = () => {
@@ -377,7 +359,7 @@
       const [locations, setLocations] = useState([]);
       const [isOnline, setIsOnline] = useState(navigator.onLine);
       const [weather, setWeather] = useState(null);
-      const [token, setToken] = useState(null);//add token state
+      const [token, setToken] = useState(null);
       const [isLoading, setIsLoading] = useState(true);
       const [loadingWeather, setLoadingWeather] = useState(false);
       const [mapContextLost, setMapContextLost] = useState(false);
@@ -388,6 +370,7 @@
       const [mapLoading, setMapLoading] = useState(false);
       const mapContainer = useRef(null);
       const map = useRef(null);
+      const markers = useRef([]);
 
       // Load initial data
       useEffect(() => {
@@ -399,7 +382,6 @@
           localStorage.setItem('tripLocations', JSON.stringify(INITIAL_LOCATIONS));
         }
         
-        // Load cached routes
         const cachedRoutes = localStorage.getItem('locationRoutes');
         if (cachedRoutes) {
           try {
@@ -409,7 +391,6 @@
           }
         }
         
-        // Check if we should return to Map tab after reload
         if (sessionStorage.getItem('returnToMapTab') === 'true') {
           console.log('🔄 Returning to Map tab after refresh');
           setActiveTab('map');
@@ -429,25 +410,22 @@
         };
       }, []);
 
-    // added for Fetch Mapbox token from proxy
-    useEffect(() => {
-      fetch(API_CONFIG.PROXY_URL + '?type=mapbox_token')
-        .then(r => r.json())
-        .then(data => {
-          console.log('Token received:', !!data.token);
-          setToken(data.token);
-        })
-        .catch(e => console.error('Token error:', e));
-    }, []);
+      useEffect(() => {
+        fetch(API_CONFIG.PROXY_URL + '?type=mapbox_token')
+          .then(r => r.json())
+          .then(data => {
+            console.log('Token received:', !!data.token);
+            setToken(data.token);
+          })
+          .catch(e => console.error('Token error:', e));
+      }, []);
 
-      // Save locations to localStorage
       useEffect(() => {
         if (locations.length > 0) {
           localStorage.setItem('tripLocations', JSON.stringify(locations));
         }
       }, [locations]);
 
-      // Fetch routes when locations load - ALWAYS attempt fetch on first load
       useEffect(() => {
         console.log('===== ROUTE FETCH EFFECT TRIGGERED =====');
         console.log('locations.length:', locations.length);
@@ -455,12 +433,10 @@
         console.log('isOnline:', isOnline);
         
         if (locations.length > 0) {
-          // Check if routes already cached
           const hasRoutes = Object.keys(locationRoutes).length > 0;
           console.log('Has cached routes:', hasRoutes);
           
           if (!hasRoutes) {
-            // No routes cached - fetch them
             console.log('🔄 No cached routes found. Fetching from API...');
             fetchAllRoutes(locations);
           } else {
@@ -471,7 +447,6 @@
         }
       }, [locations]);
 
-      // Fetch all routes from Mapbox Directions API
       const fetchAllRoutes = async (locs) => {
         console.log('🚀 fetchAllRoutes STARTED with', locs.length, 'locations');
         setIsLoadingRoutes(true);
@@ -520,13 +495,11 @@
               console.error(`❌ [${i + 1}] FETCH ERROR for ${from.name} → ${to.name}:`, e.message);
             }
             
-            // Add small delay to avoid rate limiting
             await new Promise(resolve => setTimeout(resolve, 100));
           }
           
           console.log('📊 FINAL RESULTS:', `${successCount} successful, ${failCount} failed`);
           console.log('Routes object keys:', Object.keys(routes).length);
-          console.log('Routes data:', routes);
           
           setLocationRoutes(routes);
           localStorage.setItem('locationRoutes', JSON.stringify(routes));
@@ -545,7 +518,6 @@
         }
       };
 
-      // Handle page visibility changes (tab switching)
       useEffect(() => {
         const handleVisibilityChange = () => {
           if (!document.hidden && activeTab === 'map') {
@@ -570,7 +542,6 @@
         document.addEventListener('visibilitychange', handleVisibilityChange);
         return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
       }, [activeTab]);
-
 
       useEffect(() => {
         if (activeTab === 'map' && mapContainer.current) {
@@ -602,7 +573,7 @@
 
       // Initialize Mapbox map
       useEffect(() => {
-        if (activeTab === 'map' && mapContainer.current && !map.current && token !== 'token') {
+        if (activeTab === 'map' && mapContainer.current && !map.current && token !== 'token' && token) {
           console.log('🗺️ Initializing Mapbox map');
           mapboxgl.accessToken = token;
           
@@ -619,37 +590,30 @@
             console.log('📍 Map load event fired');
             console.log('📍 locationRoutes available:', Object.keys(locationRoutes).length);
             
+            // Clear any existing markers
+            markers.current.forEach(marker => marker.remove());
+            markers.current = [];
+            
             // Add markers for all locations
-            locations.forEach((location) => {
+            locations.forEach((location, index) => {
               const el = document.createElement('div');
-              el.className = 'marker';
-              el.style.backgroundColor = location.visited ? '#9CA3AF' : '#3B82F6';
-              el.style.width = '30px';
-              el.style.height = '30px';
-              el.style.borderRadius = '50%';
-              el.style.display = 'flex';
-              el.style.alignItems = 'center';
-              el.style.justifyContent = 'center';
-              el.style.color = 'white';
-              el.style.fontWeight = 'bold';
-              el.style.fontSize = '14px';
-              el.style.border = '2px solid white';
-              el.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
-              const sequenceNumber = locations.indexOf(location) + 1;
-              el.textContent = sequenceNumber; // Add sequence number inside marker 1, 2, 3, etc.;
-
-              new mapboxgl.Marker(el)
+              el.className = 'marker' + (location.visited ? ' visited' : '');
+              el.textContent = index + 1;
+              
+              const marker = new mapboxgl.Marker(el)
                 .setLngLat(location.coordinates)
                 .setPopup(
                   new mapboxgl.Popup({ offset: 25 })
                     .setHTML(`
-                      <div style="padding: 5px;">
-                        <strong>${location.name}</strong><br/>
-                        <small>${location.address}</small>
+                      <div style="padding: 8px; font-family: sans-serif;">
+                        <strong style="font-size: 14px;">${location.name}</strong><br/>
+                        <small style="font-size: 12px; color: #666;">${location.address}</small>
                       </div>
                     `)
                 )
                 .addTo(map.current);
+              
+              markers.current.push(marker);
             });
 
             console.log('✅ Markers added to map');
@@ -710,7 +674,7 @@
             setShowRefreshPrompt(false);
           });
         }
-      }, [activeTab, locations, locationRoutes]);
+      }, [activeTab, locations, locationRoutes, token]);
 
       useEffect(() => {
         const nextLoc = getNextLocation();
@@ -784,12 +748,9 @@
 
       const refreshPage = () => {
         console.log('🔄 REFRESH CLICKED - Reloading map only');
-        setIsRefreshing(true);
         
-        // Store that we're on map tab so we can return to it
         sessionStorage.setItem('returnToMapTab', 'true');
         
-        // Small delay then reload
         setTimeout(() => {
           window.location.reload();
         }, 100);
@@ -876,7 +837,6 @@
           </div>
 
           <div className="flex-1 overflow-auto bg-gray-50 relative">
-            {/* Map always mounted (not conditionally rendered) */}
             <div 
               ref={mapContainer} 
               id="map"
@@ -935,18 +895,6 @@
                         )}
                       </div>
                       
-                      {false && ( // Temporarily disable booking display for current location
-                        <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-3 mb-3 flex items-start gap-2">
-                          <CalendarIcon />
-                          <div>
-                            <p className="font-semibold text-yellow-900 text-sm">Booking Confirmed</p>
-                            <p className="text-sm text-yellow-800">
-                              {currentLocation.booking.time} on {currentLocation.booking.date}
-                            </p>
-                          </div>
-                        </div>
-                      )}
-                      
                       <button
                         onClick={() => markAsVisited(currentLocation.id)}
                         className="w-full bg-green-600 text-white py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-green-700 transition-colors font-medium shadow-sm"
@@ -979,18 +927,6 @@
                             </p>
                           )}
                         </div>
-                        
-                        {false && ( // Temporarily disable booking display for next location
-                          <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-3 mb-3 flex items-start gap-2">
-                            <CalendarIcon />
-                            <div>
-                              <p className="font-semibold text-yellow-900 text-sm">⚠️ Booking Confirmed</p>
-                              <p className="text-sm text-yellow-800">
-                                {nextLocation.booking.time} on {nextLocation.booking.date}
-                              </p>
-                            </div>
-                          </div>
-                        )}
                         
                         {weather && !loadingWeather && (
                           <div className="bg-white border border-gray-200 rounded-lg p-3 mb-3 flex items-center gap-3">
@@ -1106,7 +1042,7 @@
                       </div>
                       
                       <div className="p-3 space-y-2">
-                        {dayLocations.map((location) => (
+                        {dayLocations.map((location, index) => (
                           <div
                             key={location.id}
                             className={`rounded-lg p-3 transition-colors ${
