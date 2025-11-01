@@ -142,9 +142,20 @@
     );
 
     const INITIAL_LOCATIONS = [
-      
       {
         id: "location_001",
+        name: "Johnsonville Library | Waitohi",
+        address: "34 Moorefield Road, Johnsonville, Wellington",
+        googleMapsQuery: "Johnsonville Library | Waitohi, 34 Moorefield Road, Johnsonville, Wellington",
+        coordinates: [174.8047, -41.2214],
+        day: "November 2",
+        dayNumber: 1,
+        visited: false,
+        booking: { hasBooking: false, time: null, date: null },
+        notes: "Starting point"
+      },
+      {
+        id: "location_002",
         name: "Green Jersey Bicycle Hire",
         address: "16 Kitchener Street, Martinborough",
         googleMapsQuery: "Green Jersey Bicycle Hire, 16 Kitchener Street, Martinborough",
@@ -157,7 +168,7 @@
       },
 
   {
-    id: "location_002",
+    id: "location_003",
         name: "3 Little Words",
         address: "107 Dry River Road, Martinborough",
         googleMapsQuery: "3 Little Words, 107 Dry River Road, Martinborough",
@@ -175,7 +186,7 @@
       //renumber the rest of the locations accordingly
      
       {
-        id: "location_003",
+        id: "location_004",
         name: "Top 10 Holiday Park",
         address: "Dublin Street, Martinborough",
         googleMapsQuery: "Martinborough Top 10 Holiday Park",
@@ -187,7 +198,7 @@
         notes: "Accommodation"
       },
       {
-        id: "location_004",
+        id: "location_005",
         name: "Star Safari",
         address: "Martinborough Area",
         googleMapsQuery: "Star Safari Martinborough",
@@ -199,7 +210,7 @@
         notes: "Evening activity"
       },
       {
-        id: "location_005",
+        id: "location_006",
         name: "Deliverance Cove Track & Castlepoint Lighthouse",
         address: "Castlepoint 5889, Wairarapa",
         googleMapsQuery: "Deliverance Cove Track, Wairarapa",
@@ -213,11 +224,11 @@
 
 
       {
-        id: "location_006",
+        id: "location_007",
         name: "Amble Inn Motel",
         address: "124 Chapel Street, Masterton",
         googleMapsQuery: "Amble Inn Motel, 124 Chapel Street, Masterton",
-        coordinates: [176.6548, -40.9520],
+        coordinates: [175.6548, -40.9523],
         day: "November 3",
         dayNumber: 2,
         visited: false,
@@ -227,7 +238,7 @@
 
 
       {
-        id: "location_007",
+        id: "location_008",
         name: "Harbour View Motel on Ahuriri Napier Beach (with sea view suites)",
         address: "60 Nelson Quay, Ahuriri, Napier 4110",
         googleMapsQuery: "Harbour View Motel on Ahuriri Napier Beach (with sea view suites), 60 Nelson Quay, Ahuriri, Napier 4110",
@@ -239,7 +250,7 @@
         notes: "Accommodation"
       },
       {
-        id: "location_008",
+        id: "location_009",
         name: "National Aquarium of New Zealand",
         address: "546 Marine Parade, Napier",
         googleMapsQuery: "National Aquarium of New Zealand, 546 Marine Parade, Napier",
@@ -255,7 +266,7 @@
         notes: "⚠️ BOOKING CONFIRMED - After 2:00 PM"
       },
       {
-        id: "location_009",
+        id: "location_010",
         name: "Bell Rock Loop Track",
         address: "Bell Rock, Napier",
         googleMapsQuery: "Bell Rock Loop Track, Napier",
@@ -270,7 +281,7 @@
 
 
       {
-        id: "location_010",
+        id: "location_011",
         name: "Captain Cook Motor Lodge",
         address: "31 Awapuni Road, Awapuni, Gisborne",
         googleMapsQuery: "Captain Cook Motor Lodge, 31 Awapuni Road, Awapuni, Gisborne",
@@ -289,7 +300,7 @@
 
      
       {
-        id: "location_011",
+        id: "location_012",
         name: "Cook's Cove Walkway",
         address: "Tolaga Bay Area, Gisborne",
         googleMapsQuery: "Cook's Cove Walkway, Tolaga Bay",
@@ -301,7 +312,7 @@
         notes: "Coastal walkway"
       },
       {
-        id: "location_012",
+        id: "location_013",
         name: "Dive Tatapouri",
         address: "Tatapouri, Gisborne",
         googleMapsQuery: "Dive Tatapouri, Tatapouri",
@@ -319,7 +330,7 @@
 
 
       {
-        id: "location_013",
+        id: "location_014",
         name: "The Mayfair Motel | Hastings",
         address: "1122 Karamu Road North, Mayfair, Hastings",
         googleMapsQuery: "The Mayfair Motel | Hastings, 1122 Karamu Road North, Mayfair, Hastings",
@@ -332,7 +343,7 @@
       },
 
       {
-        id: "location_014",
+        id: "location_015",
         name: "Te Mata Peak",
         address: "Tuki Tuki",
         googleMapsQuery: "Te Mata Peak, Tuki Tuki",
@@ -347,7 +358,7 @@
 
 
       {
-        id: "location_015",
+        id: "location_016",
         name: "Cape Kidnappers",
         address: "Clifton Road, Hastings",
         googleMapsQuery: "Cape Kidnappers, Clifton Road, Hastings",
@@ -624,7 +635,7 @@
               el.style.fontSize = '14px';
               el.style.border = '2px solid white';
               el.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
-              el.textContent = location.dayNumber;
+              el.textContent = sequenceNumber; // Add sequence number inside marker 1, 2, 3, etc.;
 
               new mapboxgl.Marker(el)
                 .setLngLat(location.coordinates)
